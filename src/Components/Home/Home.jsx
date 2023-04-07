@@ -3,6 +3,7 @@ import './Home.css'
 import { useLoaderData } from 'react-router-dom';
 import TShirt from '../T-Shirt/TShirt';
 import Cart from '../Cart/Cart';
+import toast from 'react-hot-toast';
 
 const Home = () => {
 
@@ -13,7 +14,26 @@ const Home = () => {
 
 
     const handleAddToCart = tShirt => {
-        console.log(tShirt);
+
+
+        const exist = cart.find(ts => ts._id === tShirt._id)
+        if (exist) {
+            toast.error('You have already added this t-shirt');
+        }
+        else {
+            const newCart = [...cart, tShirt]
+            setCart(newCart)
+        }
+
+    }
+
+
+    // delete 
+    const handleRemoveCart = id => {
+
+
+        const remaining = cart.filter(ts => ts._id !== id);
+        setCart(remaining)
     }
     return (
 
@@ -29,7 +49,10 @@ const Home = () => {
                 }
             </div>
             <div className="cart-container">
-                <Cart></Cart>
+                <Cart
+                    cart={cart}
+                    handleRemoveCart={handleRemoveCart}
+                ></Cart>
             </div>
         </div>
     );
